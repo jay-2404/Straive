@@ -1,28 +1,17 @@
-// json2html.js
 export default function json2html(data) {
-  // Get all unique keys to create the table headers
-  const headers = Array.from(new Set(data.flatMap(obj => Object.keys(obj))));
+    // Extract unique keys for the header row
+    const keys = [...new Set(data.flatMap(Object.keys))];
 
-  // Create the table with the data-user attribute
-  let html = <table data-user="jayendra.codes@gmail.com">\n;
+    // Generate HTML for the table
+    let html = `<table data-user="jayendra.codes@gmail.com">\n`;
+    html += `  <thead>\n    <tr>${keys.map(key => `<th>${key}</th>`).join('')}</tr>\n  </thead>\n`;
+    html += `  <tbody>\n`;
 
-  // Create the table header
-  html += '  <thead>\n    <tr>';
-  headers.forEach(header => {
-    html += <th>${header}</th>;
-  });
-  html += '</tr>\n  </thead>\n';
-
-  // Create the table body
-  html += '  <tbody>\n';
-  data.forEach(row => {
-    html += '    <tr>';
-    headers.forEach(header => {
-      html += <td>${row[header] !== undefined ? row[header] : ''}</td>;
+    // Add rows of data
+    data.forEach(item => {
+        html += `    <tr>${keys.map(key => `<td>${item[key] || ''}</td>`).join('')}</tr>\n`;
     });
-    html += '</tr>\n';
-  });
-  html += '  </tbody>\n</table>';
 
-  return html;
+    html += `  </tbody>\n</table>`;
+    return html;
 }
